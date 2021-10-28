@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pal-tracker
+  labels:
+    app: pal-tracker
+spec:
+  type: ClusterIP
+  selector:
+    app: pal-tracker
+    name: pal-tracker-pod
+  ports:
+    - port: 8080
+
+#  This is Mejin's work laptop. My oh my. Baby! Are you transcribing everything I say? Is this fun? Haha. Okay Baby.
