@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pal-tracker
+spec:
+  rules:
+    - host: development.tracker.pal-tracker.com
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: pal-tracker
+                port:
+                  number: 8080
+  ingressClassName: nginx
