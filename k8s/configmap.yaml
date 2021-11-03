@@ -6,3 +6,4 @@ metadata:
     app: pal-tracker
 data:
   welcome.message: "i love k8s"
+  management.endpoints.web.exposure.include: "info,health,palTrackerFailure"
