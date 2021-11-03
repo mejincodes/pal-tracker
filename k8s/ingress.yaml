@@ -4,9 +4,10 @@ metadata:
   name: pal-tracker
 spec:
   rules:
-    - http:
+    - host: pal-tracker.com
+      http:
         paths:
-        - path: "/pal-tracker"
+        - path: "/"
           pathType: Prefix
           backend:
               service:
