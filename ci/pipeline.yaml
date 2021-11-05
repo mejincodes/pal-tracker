@@ -70,7 +70,7 @@ jobs:
             args:
               - -exc
               - |
-                echo '((GCP_SERVICE_KEY_JSON))' > google-key.json
+                printf '%s' '((GCP_SERVICE_KEY_JSON))' > google-key.json
                 gcloud auth activate-service-account --key-file="google-key.json"
                 gcloud container clusters get-credentials ((K8S_CLUSTER_NAME)) --project ((GCP_PROJECT_NAME)) --zone us-central1-c
 
@@ -79,6 +79,38 @@ jobs:
                 grep "concourse.run_number" source-code/k8s/environments/review/deployment.yaml
                 sed -i "s/concourse.run_number/${BUILD_NUMBER}/g" source-code/k8s/environments/review/deployment.yaml
                 kubectl apply -k source-code/k8s/environments/review
+  - name: deploy-to-production
+    plan:
+      - get: source-code
+        passed:
+          - deploy-to-review
+      - get: version
+        passed:
+          - deploy-to-review
+      - task: deploy-to-production
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: pivotaleducation/deploy-gke
+          inputs:
+            - name: source-code
+            - name: version
+          run:
+            path: sh
+            args:
+              - -exc
+              - |
+                printf '%s' '((GCP_SERVICE_KEY_JSON))' > google-key.json
+                gcloud auth activate-service-account --key-file="google-key.json"
+                gcloud container clusters get-credentials ((K8S_CLUSTER_NAME)) --project ((GCP_PROJECT_NAME)) --zone us-central1-c
+
+                BUILD_NUMBER=`cat version/number`
+
+                grep "concourse.run_number" source-code/k8s/environments/production/deployment.yaml
+                sed -i "s/concourse.run_number/${BUILD_NUMBER}/g" source-code/k8s/environments/production/deployment.yaml
+                kubectl apply -k source-code/k8s/environments/production
 resources:
   - name: source-code
     type: git
