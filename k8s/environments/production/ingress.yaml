@@ -11,7 +11,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: pal-tracker
+                name: pal-tracker-production
                 port:
                   number: 8080
   ingressClassName: nginx
