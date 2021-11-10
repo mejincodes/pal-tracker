@@ -39,7 +39,7 @@ public class TimeEntryControllerTest {
             .when(timeEntryRepository)
             .create(any(TimeEntry.class));
 
-        ResponseEntity response = controller.create(timeEntryToCreate);
+        ResponseEntity<TimeEntry> response = controller.create(timeEntryToCreate);
 
         verify(timeEntryRepository).create(timeEntryToCreate);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -99,7 +99,7 @@ public class TimeEntryControllerTest {
             .when(timeEntryRepository)
             .update(eq(timeEntryId), any(TimeEntry.class));
 
-        ResponseEntity response = controller.update(timeEntryId, expected);
+        ResponseEntity<TimeEntry> response = controller.update(timeEntryId, expected);
 
         verify(timeEntryRepository).update(timeEntryId, expected);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
